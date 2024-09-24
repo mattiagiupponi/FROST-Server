@@ -1,27 +1,29 @@
-version: '3'
-
 services:
-  web:
+  frost_server:
     image: fraunhoferiosb/frost-server:latest
+    container_name: frost_server
     environment:
+      # For all settings see: https://fraunhoferiosb.github.io/FROST-Server/settings/settings.html
       - serviceRootUrl=http://localhost:8080/FROST-Server
       - plugins_multiDatastream.enable=false
       - http_cors_enable=true
       - http_cors_allowed_origins=*
       - persistence_db_driver=org.postgresql.Driver
-      - persistence_db_url=jdbc:postgresql://database:5432/sensorthings
+      - persistence_db_url=jdbc:postgresql://frost_db:5432/sensorthings
       - persistence_db_username=sensorthings
       - persistence_db_password=ChangeMe
       - persistence_autoUpdateDatabase=true
+      - plugins.openApi.enable=true
     ports:
       - 8080:8080
       - 1883:1883
     depends_on:
-      database:
+      frost_db:
         condition: service_healthy
 
-  database:
+  frost_db:
     image: postgis/postgis:14-3.2-alpine
+    container_name: frost_db
     environment:
       - POSTGRES_DB=sensorthings
       - POSTGRES_USER=sensorthings
@@ -36,4 +38,3 @@ services:
 
 volumes:
     postgis_volume:
-

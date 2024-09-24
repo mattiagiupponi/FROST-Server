@@ -22,6 +22,7 @@
         <module>MultiDatastream</module>
         <module>OData</module>
         <module>OpenApi</module>
+        <module>STAplus</module>
     </modules>
 
     <properties>
